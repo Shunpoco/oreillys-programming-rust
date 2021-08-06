@@ -1,4 +1,31 @@
 use actix_web::{web, App, HttpResponse, HttpServer};
+use serde::Deserialize;
+
+#[derive(Deserialize)]
+struct GcdParameters {
+    n: u64,
+    m: u64,
+}
+
+fn post_gcd(form: web::Form<GcdParameters>) -> HttpResponse {
+    if form.n == 0 || form.m == 0 {
+        return HttpResponse::BadRequest()
+            .content_type("text/html")
+            .body("Computing the GCD with zero is boring.");
+    }
+
+    let response = 
+        format!("The greatest common divisor of the numbers {} and {} \
+                is <b>{}</b>\n",
+                form.n, form.m, gcd(form.n, form.m));
+    HttpResponse::Ok()
+        .content_type("text/html")
+        .body(response)
+}
+
+fn gcd(n: u64, m: u64) -> u64 {
+    n + m
+}
 
 fn get_index() -> HttpResponse {
     HttpResponse::Ok() // it represents an HTTP 200 OK status
@@ -19,7 +46,7 @@ fn main() {
     let server = HttpServer::new(|| {
         App::new()
             .route("/", web::get().to(get_index))
-            .route("/hoge", web::get().to(get_index))
+            .route("/gcd", web::post().to(post_gcd))
     });
 
     println!("Serving on http://localhost:3000...");
