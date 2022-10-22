@@ -18,6 +18,17 @@ fn exec_sayhello()-> std::io::Result<()> {
     Ok(())
 }
 
+// Generics!
+fn min<T: Ord>(value1: T, value2: T) -> T {
+    if value1 <= value2 {
+        value1
+    } else {
+        value2
+    }
+}
+
 fn main() {
     exec_sayhello();
+
+    println!("{}", min(10, 20));
 }
