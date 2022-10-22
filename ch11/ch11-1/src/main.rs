@@ -27,8 +27,26 @@ fn min<T: Ord>(value1: T, value2: T) -> T {
     }
 }
 
+// Generics say_hello
+fn g_say_hello<W: Write>(out: &mut W) -> std::io::Result<()> {
+    out.write_all(b"hello generics!\n")?;
+    out.flush()
+}
+
+fn exec_g_say_hello() -> std::io::Result<()> {
+    let mut local_file = File::create("hello_g.txt")?;
+    g_say_hello(&mut local_file)?;
+
+    let mut bytes = vec![];
+    g_say_hello(&mut bytes)?;
+    assert_eq!(bytes, b"hello generics!\n");
+    Ok(())
+}
+
 fn main() {
     exec_sayhello();
 
     println!("{}", min(10, 20));
+
+    exec_g_say_hello();
 }
