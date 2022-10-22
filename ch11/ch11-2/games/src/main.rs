@@ -3,7 +3,7 @@ pub struct Canvas {
 }
 impl Canvas {
     fn new(w: usize, h: usize) -> Canvas {
-        let v = vec![vec!['-';w];h];
+        let v = vec![vec![' ';w];h];
         Canvas {c: v,}
     }
 
@@ -31,7 +31,7 @@ pub struct Broom {
 impl Visible for Broom {
     fn draw(&self, canvas: &mut Canvas) {
         for y in self.y - self.height - 1 .. self.y {
-            canvas.write_at(self.x, y, '|').unwrap();
+            canvas.write_at(self.x, y, '*').unwrap();
         }
         canvas.write_at(self.x, self.y, 'M').unwrap();
     }
@@ -42,7 +42,7 @@ impl Visible for Broom {
 }
 
 fn main() {
-    let mut c = Canvas::new(1000, 1000);
+    let mut c = Canvas::new(30, 30);
     let b = Broom {x:10, y:10, height:1};
     println!("{:?}", c.c);
 
